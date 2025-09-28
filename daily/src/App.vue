@@ -1,5 +1,5 @@
 <script setup>
-import MarkdownEditor from '@/components/MarkdownEditor.vue'
+import MarkdownEditor from '@/components/Markdown.vue'
 import { ref } from 'vue'
 
 const awesome = ref(true)
