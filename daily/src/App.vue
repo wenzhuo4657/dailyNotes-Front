@@ -8,10 +8,16 @@ const awesome = ref(true)
 <template>
   <div class="any">
 
-            
+    <div>      
         <h1>日程记录</h1>
+        <div>
+          <!-- todo 按钮栏也要做成一个组件 -->
+              <button @click="awesome=!awesome">编辑/预览</button>
+        </div>
+    </div>
+      
         <div  class="banner">
-          <button @click="awesome=!awesome">编辑/预览</button>
+          
           <MarkdownEditor  :awesome="awesome" />
         </div>
         

@@ -82,7 +82,7 @@ watch(
   
           <div class="split">
                 <div> 
-                <!--  todo 预览和编辑要做成两个组件，对于预览要以时间轴为导航， 编辑则以源代码模式展览 -->
+                <!--  TODO 预览和编辑要做成两个组件，对于预览要以时间轴为导航， 编辑则以源代码模式展览 -->
                   <div v-if="awesome" class="split-preview">
                        <div class="split-preview__content" v-html="rendered"></div> 
                   </div>

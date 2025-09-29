@@ -1,7 +1,10 @@
 import axios from "axios";
 
+
 export const http = axios.create({
-  baseURL: "http://localhost:8080",
+
+  // TODO 控制项目中的根路径
+  baseURL: import.meta.env.VITE_API_BASE,
   timeout: 10000,
   transformResponse: [(data) => data],
 });
