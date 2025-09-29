@@ -5,7 +5,7 @@ import DOMPurify from 'dompurify'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css'
 import { getMarkdown, saveMarkdown } from "@/services/markdown";
-import mdEdit from "@/components/MarkdownEdit.vue";
+import mdEdit from "@/components/md/MarkdownEdit.vue";
 const props = defineProps<{ awesome: boolean }>()
 
 
@@ -35,6 +35,7 @@ const md = new MarkdownIt({
 
 // 响应式变量： md文档内容
 const rendered = computed(() => {
+  // TODO 缺少本地缓存
   const rawHtml = md.render(text.value)
   return DOMPurify.sanitize(rawHtml)
 })
@@ -81,18 +82,17 @@ watch(
 <template>
   
           <div class="split">
-                <div> 
+        
                 <!--  TODO 预览和编辑要做成两个组件，对于预览要以时间轴为导航， 编辑则以源代码模式展览 -->
                   <div v-if="awesome" class="split-preview">
                        <div class="split-preview__content" v-html="rendered"></div> 
                   </div>
                   <div v-if="!awesome" class="split-edit">
-                        <md-edit class="split-editor" v-model:text="text" />
+                        <md-edit class="split-editor" v-model="text" />
                   </div>
               
             
-           
-                </div> 
+        
             </div>
 </template>
 
