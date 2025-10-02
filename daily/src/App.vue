@@ -1,5 +1,6 @@
 <script setup>
 import MarkdownEditor from '@/components/md/Markdown.vue'
+import ButtonBar from './components/button/ButtonBar.vue'
 import { ref } from 'vue'
 
 const awesome = ref(true)
@@ -8,12 +9,11 @@ const awesome = ref(true)
 <template>
   <div class="any">
 
-    <div>      
+    <div  class="bar">      
         <h1>日程记录</h1>
         <div>
-          <!-- TODO 按钮栏也要做成一个组件 -->
-           <!--  问题  组件之间如何通信？目前的通信都是父子之间进行数据绑定？一个父亲两个兄弟能否正确进行状态变化？-->
-              <button @click="awesome=!awesome">编辑/预览</button>
+          <ButtonBar></ButtonBar>
+     
         </div>
     </div>
       
@@ -30,6 +30,11 @@ const awesome = ref(true)
 </template>
 
 <style scoped>
+.bar{
+  justify-items: center;
+  display: grid;
+  grid-template-rows:  10vh 10vh;
+}
 
 .any{
   width: 100vw;
@@ -45,4 +50,6 @@ const awesome = ref(true)
   width: 80vw;
   overflow: auto; 
 }
+
+
 </style>

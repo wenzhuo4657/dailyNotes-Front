@@ -1,17 +1,20 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import MarkdownIt from 'markdown-it'
 import DOMPurify from 'dompurify'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css'
 import { getMarkdown, saveMarkdown } from "@/services/markdown";
 import mdEdit from "@/components/md/MarkdownEdit.vue";
-const props = defineProps<{ awesome: boolean }>()
+import { EventBus, Events } from '@/envBus/envBus'
 
-
+const awesome = ref(true)
 const text = ref('')
 const isSaving = ref(false)
 
+const handleEditorToggle = (nextState) => {
+  awesome.value = Boolean(nextState)
+}
 
 // md渲染器
 const md = new MarkdownIt({
@@ -32,68 +35,59 @@ const md = new MarkdownIt({
   }
 })
 
-
-// 响应式变量： md文档内容
+// 响应式计算 md文档内容
 const rendered = computed(() => {
-  // TODO 缺少本地缓存
+
   const rawHtml = md.render(text.value)
   return DOMPurify.sanitize(rawHtml)
 })
 
-
-// 读取远程服务器上的md文档
+// 获取远程服务器上的md文档
 async function fetchContent() {
-  
-    text.value=await getMarkdown();
-  
-
+  text.value = await getMarkdown();
 }
-
 
 // 修改远程服务器上的md文档
 async function saveContent() {
-  if (isSaving.value) {//避免重复提交
+  if (isSaving.value) {//防止重复提交
     return
   }
 
-
-  try{
-    const res=await saveMarkdown(text.value);
-  }finally{
-    isSaving.value=false
+  isSaving.value = true
+  try {
+    await saveMarkdown(text.value);
+  } finally {
+    isSaving.value = false
   }
 }
 
-onMounted(fetchContent)
+// vue组件生命周期：组件挂载完成后执
+onMounted(() => {
+  EventBus.$on(Events.Button_edit, handleEditorToggle)
+  fetchContent()
+})
+// vue组件生命周期：在组件实例被卸载之前调用
+onBeforeUnmount(() => {
+  EventBus.$off(Events.Button_edit, handleEditorToggle)
+})
 
-
-watch(
-  () => props.awesome,
-  (newVal, oldVal) => {
-    if (oldVal === false && newVal === true) {
-      saveContent();
-    }
+watch(awesome, (newVal, oldVal) => {
+  if (oldVal === false && newVal === true) {
+    saveContent();
   }
-);
-
-
+})
 </script>
 
 <template>
-  
-          <div class="split">
-        
-                <!--  TODO 预览和编辑要做成两个组件，对于预览要以时间轴为导航， 编辑则以源代码模式展览 -->
-                  <div v-if="awesome" class="split-preview">
-                       <div class="split-preview__content" v-html="rendered"></div> 
-                  </div>
-                  <div v-if="!awesome" class="split-edit">
-                        <md-edit class="split-editor" v-model="text" />
-                  </div>
-              
-            
-        
-            </div>
+  <div class="split">
+
+    <div v-if="awesome" class="split-preview">
+      <div class="split-preview__content" v-html="rendered"></div>
+    </div>
+    <div v-else class="split-edit">
+      <md-edit class="split-editor" v-model="text" />
+    </div>
+  </div>
 </template>
 
 <style scoped>
