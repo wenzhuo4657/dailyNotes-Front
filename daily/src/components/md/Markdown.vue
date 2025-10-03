@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
-import MarkdownIt from 'markdown-it'
-import DOMPurify from 'dompurify'
-import hljs from 'highlight.js'
+
 import 'highlight.js/styles/github.css'
 import { getMarkdown, saveMarkdown } from "@/services/markdown";
 import mdEdit from "@/components/md/MarkdownEdit.vue";
+import mdView from "@/components/md/MarkdownView.vue";
 import { EventBus, Events } from '@/envBus/envBus'
 
 const awesome = ref(true)
@@ -16,31 +15,6 @@ const handleEditorToggle = (nextState) => {
   awesome.value = Boolean(nextState)
 }
 
-// md渲染器
-const md = new MarkdownIt({
-  html: false,
-  linkify: true,
-  breaks: true,
-  highlight(code, lang) {
-    if (lang && hljs.getLanguage(lang)) {
-      try {
-        const { value } = hljs.highlight(code, { language: lang })
-        return `<pre><code class="hljs language-${lang}">${value}</code></pre>`
-      } catch {
-        /* keep default escaping below */
-      }
-    }
-    const escaped = md.utils.escapeHtml(code)
-    return `<pre><code class="hljs">${escaped}</code></pre>`
-  }
-})
-
-// 响应式计算 md文档内容
-const rendered = computed(() => {
-
-  const rawHtml = md.render(text.value)
-  return DOMPurify.sanitize(rawHtml)
-})
 
 // 获取远程服务器上的md文档
 async function fetchContent() {
@@ -82,7 +56,8 @@ watch(awesome, (newVal, oldVal) => {
   <div class="split">
 
     <div v-if="awesome" class="split-preview">
-      <div class="split-preview__content" v-html="rendered"></div>
+      <md-view  class="split-preview__content" v-model="text"  ></md-view>
+    
     </div>
     <div v-else class="split-edit">
       <md-edit class="split-editor" v-model="text" />
