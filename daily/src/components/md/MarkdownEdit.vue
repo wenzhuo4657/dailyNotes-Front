@@ -1,7 +1,9 @@
-<script setup lang="ts">
+<script setup >
 import { ref, watch } from 'vue'
 
-const model = defineModel<string>({ default: '' })
+const model = defineModel({ default: '' })
+
+  
 
 
 
