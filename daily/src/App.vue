@@ -1,5 +1,5 @@
 <script setup>
-import MarkdownEditor from '@/components/md/Markdown.vue'
+import MarkdownEditor from '@/components/md/banner.vue'
 import ButtonBar from './components/button/ButtonBar.vue'
 import { ref } from 'vue'
 
