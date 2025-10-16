@@ -1,132 +1,47 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
-
-import 'highlight.js/styles/github.css'
-import {  getMd,addItem } from "@/services/markdown";
-import { EventBus, Events } from '@/envBus/envBus'
-import ItemVierAndEndit from './ItemVierAndEndit.vue';
+import dailyBanner from '@/components/md/daily/dailyBanner.vue'
+import checklistBanner from './checklist/checklistBanner.vue';
+import { ref } from 'vue';
 
 
 
-type Item = { id: number; title: string; content: string }
-const items = ref<Item[]>([])
-const current = ref<Item | null>(null)
+type ViewKey = 'daily' | 'Checklist' ;
 
-
-
-
-
-
-// 获取远程服务器上的md文档
-async function fetchContent() {
-  const json = await getMd();
-  const list = Array.isArray(json) ? json : json.data;
-  if (!Array.isArray(list)) throw new Error('返回不是数组或 data 数组')
-
-  items.value = list.map(({ id, title, content }) => ({ id, title, content }))
-  current.value = items.value[0] ?? null
-}
-
-
-
-// vue组件生命周期：组件挂载完成后执
-onMounted(() => {
-  fetchContent()
-})
-// vue组件生命周期：在组件实例被卸载之前调用
-onBeforeUnmount(() => {
-
-})
-
-
-function chooseContent(it){
-  current.value=it
-  
-}
-
-async function InsertItem(){
-  type Item ={content_name_Id:number}
-  const data:Item={content_name_Id:0}
-  const res=await addItem(data);
-  if(res==true){
-    alert("当前文档的当日Item已添加/已存在，请手动刷新！！")
-  }
-
-}
-
-
+const current = ref<ViewKey>('daily'); // 控制显示哪个
+const compMap = {
+  daily: dailyBanner,
+  checklist: checklistBanner,
+} as const;
 </script>
 
+<!-- TODO 文档类型，多文档引入，该组件用于选择不同视图类型 -->
 <template>
-  <div class="split">
-   <div class="split_title">
-      <button 
-          @click="InsertItem"
-          class="button-reset">
-        新增</button>
-      <button
-        v-for="it in items"
-        :key="it.id"
-        @click="chooseContent(it)"
-        class="button-reset "
-      >
-        <strong>{{ it.title }}</strong>
-      </button>
+    <div class="banner  banner-size">
+             <component :is="compMap[current]" />
     </div>
-    <div   class="split_content">
-      <div v-if="current"  class="editor-wrap">
-        <item-vier-and-endit  v-model:id="current.id"  v-model:content="current.content"></item-vier-and-endit>
-      </div>
-      <div v-else>
-        <em>加载中...</em>
-      </div>
-    </div>
+
+
+
+
    
-  </div>
+
 </template>
 
-<style scoped>
-.split {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-
+<style>
+.banner{
+  background: url("https://blog.wenzhuo4657.org/img/2025/10/a1a61cd9c40ef9634219fe41ea93706b.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 0 0;
 }
 
-.split_title{
-  width: 20%;
-   height: 100%;
-   display: flex;        
-  flex-direction: column; 
-  gap: 8px;
-  padding-right: 5%;
+.banner-size{
+
+  display: block;
+  width: 100%;
+  height: 100%;
   overflow: auto; 
 }
-.split_title > div{
-  display: flex;
-  flex-direction: row;
-}
-
-.split_content {
-  display: flex;
-  width: 75%;
-  height: 100%;
-
-}
-
-
-.editor-wrap {
-  flex: 1;           
-}
-
-
-
-
-
-
-
-
 
 
 </style>
