@@ -1,16 +1,52 @@
-<script setup>
+<script setup lang="ts">
 import { EventBus, Events } from '@/envBus/envBus';
+import { addItem, DownLoadFile, upload } from '@/services/markdown';
+import { ref } from 'vue';
 
-let isPreview = true; // true 预览状态 false 编辑状态
+let isPreview = true;
+const fileInput = ref<HTMLInputElement | null>(null);
+const uploading = ref(false);
+const progress = ref(0);
 
 function toggleEditorMode() {
   isPreview = !isPreview;
   EventBus.$emit(Events.Button_edit, isPreview);
 }
+
+
+
+function onClickImport() {
+  fileInput.value?.click();
+}
+
+async function onFileChange(e: Event) {
+  const input = e.target as HTMLInputElement;
+  const file = input.files?.[0];
+  if (!file) return;
+
+
+
+  const fd = new FormData();
+
+  fd.append('file', file, file.name);
+
+  try {
+    uploading.value = true;
+    progress.value = 0;
+
+    await upload(fd)
+
+  } finally {
+    uploading.value = false;
+    input.value = ''; // 允许再次选择同名文件触发 change
+  }
+}
+
 </script>
 
 <template>
   <div class="buttonBar">
+    <!-- <button  @click="addItem">新增</button> -->
     <button @click="toggleEditorMode">编辑/预览</button>
     <!-- ui优化 -->
      <!-- 1， 默认的滑动栏太丑了 -->
@@ -18,11 +54,21 @@ function toggleEditorMode() {
     <!-- TODO 懒加载 -->
      <!-- 目前的预览和编辑都不会等待md文档接口返回，这是非常致命的缺陷 -->
 
-    <!-- TODO   导入和导出-->
-     <!-- 导入： 从文件系统中选一个文件上传  暂定：可能会改成一个zip压缩包 -->
-      <!-- 导出： 从服务器中下载一个文件    暂定： 后续可能会改成下载一个zip压缩包 -->
-    <button @click="toggleEditorMode">导出</button>
-    <button @click="toggleEditorMode">导入</button>
+
+
+
+    <button @click="DownLoadFile">导出</button>
+    <button @click="onClickImport" :disabled="uploading">导入</button>
+
+
+    <!-- 隐藏的文件选择框 -->
+      <input
+    ref="fileInput"
+    type="file"
+    style="display: none;"
+    accept=".db"  
+    @change="onFileChange"
+  />
 
   </div>
 </template>

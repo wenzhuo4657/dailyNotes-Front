@@ -1,16 +1,17 @@
 <script setup>
-import MarkdownEditor from '@/components/md/Markdown.vue'
+
 import ButtonBar from './components/button/ButtonBar.vue'
 import { ref } from 'vue'
+import Banner from './components/md/banner.vue';
 
-const awesome = ref(true)
+
 </script>
 
 <template>
   <div class="any">
 
     <div  class="bar">      
-        <h1>日程记录</h1>
+        <h1>序幕与新章</h1>
         <div>
           <ButtonBar></ButtonBar>
      
@@ -18,8 +19,10 @@ const awesome = ref(true)
     </div>
       
         <div  class="banner">
+
+          <Banner></Banner>
           
-          <MarkdownEditor  :awesome="awesome" />
+
         </div>
         
 
