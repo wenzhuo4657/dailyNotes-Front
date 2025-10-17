@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import dailyBanner from '@/components/md/daily/dailyBanner.vue'
-import checklistBanner from './checklist/checklistBanner.vue';
+import dailyBanner from '@/components/typeDaily/daily/dailyBanner.vue'
+import checklistBanner from '@/components/typeDaily/checklist/checklistBanner.vue';
 import { ref } from 'vue';
 
 

@@ -51,6 +51,7 @@ async function saveContent() {
 
 
     <div  class="sqlit">
+    <!-- 换行失效 -->
         <div v-if="awesome">
             {{ content }}
         </div>
