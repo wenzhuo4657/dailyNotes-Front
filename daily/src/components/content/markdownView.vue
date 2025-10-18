@@ -7,7 +7,7 @@ import DOMPurify from 'dompurify'
  const model = defineModel<string>({ default: '' })
 
 // 解析器
-const md = new MarkdownIt()
+const md = new MarkdownIt({ breaks: true })
 
 const   raw=computed(() =>{
     return md.render(model.value);
