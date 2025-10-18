@@ -1,8 +1,8 @@
 <script setup>
 
-import ButtonBar from './components/button/ButtonBar.vue'
+import ButtonBar from '@/components/button/ButtonBar.vue'
 import { ref } from 'vue'
-import Banner from './components/md/banner.vue';
+import Banner from '@/components/banner.vue';
 
 
 </script>

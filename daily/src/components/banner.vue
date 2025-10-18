@@ -5,6 +5,7 @@ import { ref } from 'vue';
 
 
 
+
 type ViewKey = 'daily' | 'Checklist' ;
 
 const current = ref<ViewKey>('daily'); // 控制显示哪个
@@ -29,7 +30,8 @@ const compMap = {
 
 <style>
 .banner{
-  background: url("https://blog.wenzhuo4657.org/img/2025/10/a1a61cd9c40ef9634219fe41ea93706b.jpg");
+  background-image: var(--cdn-url);  
+
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0 0;
