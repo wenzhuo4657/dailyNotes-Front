@@ -5,7 +5,7 @@ import { ref } from 'vue';
 
 
 const viewList = ['daily', 'Checklist'] as const;
-const awesome=ref(true)
+const awesome=ref(false)
 
 
 
