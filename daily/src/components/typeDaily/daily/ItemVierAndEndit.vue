@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { EventBus, Events } from '@/envBus/envBus'
 import { updateItem } from '@/services/markdown'
+import mdView from '@/components/content/markdownView.vue'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+
 
 const id = defineModel<number | null>('id')
 const content = defineModel<string>('content')
@@ -53,7 +55,7 @@ async function saveContent() {
     <div  class="sqlit">
     <!-- 换行失效 -->
         <div v-if="awesome">
-            {{ content }}
+          <md-view v-model="content"></md-view>
         </div>
         <div v-else  class="editor-wrap">
             <textarea v-model="content"   class="edit_sqlit"></textarea>

@@ -55,7 +55,10 @@ async function onFileChange(e: Event) {
      <!-- 目前的预览和编辑都不会等待md文档接口返回，这是非常致命的缺陷 -->
 
 
-
+<!-- 按钮布局优化，   -->
+ <!--  常用： 编辑/预览、文档类型选择、文档选择  -->
+   <!-- 不常用 ： 导入、导出 -->
+    <!-- 考虑做一个边栏，用于选择、改变视图状态， -->
 
     <button @click="DownLoadFile">导出</button>
     <button @click="onClickImport" :disabled="uploading">导入</button>

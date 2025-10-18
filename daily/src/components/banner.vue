@@ -4,21 +4,28 @@ import checklistBanner from '@/components/typeDaily/checklist/checklistBanner.vu
 import { ref } from 'vue';
 
 
+const viewList = ['daily', 'Checklist'] as const;
+const awesome=ref(true)
 
 
-type ViewKey = 'daily' | 'Checklist' ;
 
-const current = ref<ViewKey>('daily'); // 控制显示哪个
+const current = ref("daily"); // 控制显示哪个
 const compMap = {
   daily: dailyBanner,
   checklist: checklistBanner,
 } as const;
 </script>
-
-<!-- TODO 文档类型，多文档引入，该组件用于选择不同视图类型 -->
 <template>
-    <div class="banner  banner-size">
-             <component :is="compMap[current]" />
+    <div v-if="awesome" class="select">
+      <el-radio v-model="current" :label="viewList[0]">{{  viewList[0]}}</el-radio>
+      <el-radio v-model="current" :label="viewList[1]">{{  viewList[1]}}</el-radio>
+
+      <br></br>
+      <strong>当前选择： {{ current }}</strong>
+    </div>
+   
+    <div v-else class="banner  banner-size">
+          <component :is="compMap[current]" />
     </div>
 
 
@@ -29,6 +36,9 @@ const compMap = {
 </template>
 
 <style>
+.select{
+
+}
 .banner{
   background-image: var(--cdn-url);  
 
