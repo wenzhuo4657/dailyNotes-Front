@@ -1,12 +1,26 @@
 <script setup lang="ts">
 import dailyBanner from '@/components/typeDaily/daily/dailyBanner.vue'
 import checklistBanner from '@/components/typeDaily/checklist/checklistBanner.vue';
-import { ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { EventBus, Events } from '@/envBus/envBus';
 
 
 const viewList = ['daily', 'Checklist'] as const;
 const awesome=ref(false)
 
+// vue组件生命周期：组件挂载完成后执
+onMounted(() => {
+    EventBus.$on(Events.Button_view,handleEditorToggle)
+})
+// vue组件生命周期：在组件实例被卸载之前调用
+onBeforeUnmount(() => {
+    EventBus.$off(Events.Button_view,handleEditorToggle)
+
+})
+
+const handleEditorToggle = (nextState) => {
+  awesome.value = Boolean(nextState)
+}
 
 
 const current = ref("daily"); // 控制显示哪个
