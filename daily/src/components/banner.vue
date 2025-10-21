@@ -5,7 +5,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { EventBus, Events } from '@/envBus/envBus';
 
 
-const viewList = ['daily', 'Checklist'] as const;
+const viewList = ['daily', 'checklist'] as const;
 const awesome=ref(false)
 
 // vue组件生命周期：组件挂载完成后执
