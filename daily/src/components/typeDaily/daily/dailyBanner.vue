@@ -5,7 +5,9 @@ import 'highlight.js/styles/github.css'
 import {  getMd,addItem } from "@/services/markdown";
 import { EventBus, Events } from '@/envBus/envBus'
 import ItemVierAndEndit from '@/components/typeDaily/daily/ItemVierAndEndit.vue';
-
+import {
+  Plus
+} from '@element-plus/icons-vue'
 
 
 type Item = { id: number; title: string; content: string }
@@ -45,9 +47,7 @@ function chooseContent(it){
 }
 
 async function InsertItem(){
-  type Item ={content_name_Id:number}
-  const data:Item={content_name_Id:0}
-  const res=await addItem(data);
+  const res=await addItem();
   if(res==true){
     alert("当前文档的当日Item已添加/已存在，请手动刷新！！")
   }
@@ -60,18 +60,18 @@ async function InsertItem(){
 <template>
   <div class="split">
    <div class="split_title">
-      <button 
-          @click="InsertItem"
-          class="button-reset">
-        新增</button>
-      <button
-        v-for="it in items"
-        :key="it.id"
-        @click="chooseContent(it)"
-        class="button-reset "
-      >
-        <strong>{{ it.title }}</strong>
-      </button>
+    
+      <el-button type="success" :icon="Plus"  @click="InsertItem" circle />
+
+      <el-button 
+          type="success" plain
+          v-for="it in items"
+          :key="it.id"
+          @click="chooseContent(it)"
+          >
+           <strong>{{ it.title }}</strong>
+      </el-button>
+    
     </div>
     <div   class="split_content">
       <div v-if="current"  class="editor-wrap">

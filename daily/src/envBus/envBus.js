@@ -46,4 +46,5 @@ export const EventBus = new SimpleEventBus();
 
 export const Events = Object.freeze({
   Button_edit: 'button:edit',
+  Button_view: 'button:view'
 });

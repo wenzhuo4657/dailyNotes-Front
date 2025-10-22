@@ -13,6 +13,12 @@ function toggleEditorMode() {
   EventBus.$emit(Events.Button_edit, isPreview);
 }
 
+let isViewSelect=false;
+function viewSelect() {
+  isViewSelect = !isViewSelect;
+  EventBus.$emit(Events.Button_view, isViewSelect);
+}
+
 
 
 function onClickImport() {
@@ -48,6 +54,7 @@ async function onFileChange(e: Event) {
   <div class="buttonBar">
     <!-- <button  @click="addItem">新增</button> -->
     <button @click="toggleEditorMode">编辑/预览</button>
+    <button   @click="viewSelect">视图选择/返回</button>
     <!-- ui优化 -->
      <!-- 1， 默认的滑动栏太丑了 -->
 

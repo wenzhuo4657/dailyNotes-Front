@@ -18,6 +18,36 @@ export async  function getMd(){
  
   return res.data;
 }
+export async  function getMdByType(content_name_Id,type){
+
+  let url="/api/md/type";
+  url+="?id="+content_name_Id;
+  url+="&type="+type;
+
+  const res= await http.get(
+    url,
+    {
+      headers: {      
+      Accept: "application/json",
+      },
+       responseType: "json"
+    }
+  )
+ 
+  return res.data;
+}
+
+
+export async function  updateItemByType(data,content_name_Id) {
+  let url="/api/md/type";
+  url+="?id="+content_name_Id;
+
+  const res=await http.put(url,data,{
+    responseType: "text"
+  })
+  return !!res.data;
+  
+}
 
 export async function  updateItem(data) {
   const res=await http.put("/api/md",data,{
@@ -27,8 +57,16 @@ export async function  updateItem(data) {
   
 }
 
-export async function addItem(data) {
-  const res=await http.post("/api/md",data,{
+export async function addItemByType(data) {
+  const res=await http.post("/api/md/type",data,{
+    responseType: "text"
+  })
+  return !!res.data;
+  
+}
+
+export async function addItem() {
+  const res=await http.post("/api/md",{
     responseType: "text"
   })
   return !!res.data;
@@ -83,3 +121,25 @@ export async function  upload(data) {
 
 
 
+
+
+export async function updateCheckListTitle(data){
+    const res=await http.post("/api/md/field/checkList/title",data,{
+    responseType: "text"
+  })
+  return !!res.data;
+
+
+}
+
+
+export async function updateCheckListStatus(data){
+    let url="/api/md/field/checkList/finish"
+    url+="?id="+data
+    const res=await http.post(url,{
+    responseType: "text"
+     })
+  return !!res.data;
+
+
+}
