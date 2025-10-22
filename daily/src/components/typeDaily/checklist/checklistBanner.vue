@@ -12,21 +12,71 @@ const items = ref<Item[]>([])
 const current = ref<Item | null>(null)
 
 
+const all=ref<Item[]>([])
+const finishs = ref<Item[]>([])
+const notCompleted=ref<Item[]>([])
+
+
+
 // 获取远程服务器上的列表
 async function fetchContent() {
   const json = await getMdByType(1,1);
   const list = Array.isArray(json) ? json : json.data;
   if (!Array.isArray(list)) throw new Error('返回不是数组或 data 数组')
 
-  items.value = list.map(({ id, title, content ,expand}) => ({ id, title, content,expand,editing: true   }))
+  items.value = list.map(({ id, title, content ,expand}) => ({ id, title, content,expand,editing: false   }))
   current.value = items.value[0] ?? null
+  toBool(items.value)
+
+  
 }
 
+//处理列表数据，根据expand字段解析是否完成，
+function toBool(data:Item[]){
 
+  const done: Item[] = [];
+  const todo: Item[] = [];
+
+  for(let i=0;i<data.length;i++){
+    const item=data[i];
+    if(item.expand=='true'){
+      done.push(item);
+    }else{
+      todo.push(item);
+    }
+
+  }
+  all.value=data
+  finishs.value = done;
+  notCompleted.value = todo;
+
+  items.value=notCompleted.value
+
+  console.log("数据回调完成")
+
+}
+
+// 动态切换items
+function changeItems(data){
+  if(data==1){
+    items.value=all.value
+  }
+  if(data==2){
+    items.value=notCompleted.value
+  }
+  if(data==3){
+    
+    items.value=finishs.value
+  }
+
+
+
+}
 
 // vue组件生命周期：组件挂载完成后执
 onMounted(() => {
   fetchContent()
+
 })
 // vue组件生命周期：在组件实例被卸载之前调用
 onBeforeUnmount(() => {
@@ -63,37 +113,106 @@ function updateTitle(item:Item){
 
 
 </script>
-<!-- 暂时不对其进行分类，只是做一个备忘录，记录单独的事宜，同样可以title展示，详细内容记录在content，content不是必须的 -->
- <!--是否完成：可以通过属性变化展示是否已完成， 同时为了避免日后插入时间视图，注意记录创建和完成两个时间点 -->
 
+
+<!--  -->
 <!--TODO   搞这种东西总是想要想要时间视图，但真的有必要吗？暂时先不做时间视图 -->
 <template>
-    <div>
+    <div  class="banner">
         <el-button type="success" :icon="Plus"  @click="addItem" circle />
-        <div v-for="item in items">
-            
+        <el-button  @click="changeItems(2)">todo</el-button>
+        <el-button  @click="changeItems(3)">finishs</el-button>
 
-             <div>
-              <!--ui  横向排列，限制高度， -->
+        
+    </div>
+    <div>
+     
+        <div v-for="item in items"  class="item-layout">
+             <!-- 左侧：标题/输入区域（宽度固定或自适应） -->
+      <div   class="item-content" >
+        <div>
+             <!-- 只读态 -->
+        <div
+          v-show="!item.editing"
+          class=" glass-card"
+          @click="item.editing = true"
+        >
+          {{ item.title || '（点击编辑）' }}
+        </div>
+
+        <!-- 编辑态 -->
+
+         <el-input   v-show="item.editing" v-model="item.title"   placeholder="Please input" />
+        </div>
       
-                <div v-if="item.editing"  >
-                  <div @click="item.editing=!item.editing">
-                        {{ item.title }}
-                  </div>
+  
+      </div>
+        <!-- 右侧：操作按钮 -->
+        <div class="item-actions">
+        <el-button
+          v-if="!item.editing"
+          type="success"
+          :icon="Check"
+          @click="isSuccess(item)"
+          circle
+        />
+        <el-button
+          v-else
+          @click="item.editing=!item.editing;updateTitle(item)"
+        >保存</el-button>
+      </div>
+    </div>
                  
-                   <el-button type="success" :icon="Check"  @click="isSuccess(item)" circle />
-      
-                  
-                </div>
-                <div v-else>
-                    <textarea v-model="item.title" ></textarea>
-                    <el-button @click="item.editing=!item.editing;updateTitle(item)" >确认</el-button>
-                </div>
-                 
-             </div>
+     
 
      
-        </div>
+   
        
     </div>
 </template>
+
+<style>
+.banner{
+  width: 10%;
+  display: flex;
+  flex-direction: row;
+}
+.item-layout{
+  display: flex;
+  flex-direction: row;
+
+
+}
+.item-content{
+  width: 30%;
+}
+
+.item-content > div{
+  width: 90%;
+
+}
+
+.item-content  > textarea{
+  width: 100%;
+}
+
+.item-actions{
+  width: 5%;
+}
+
+
+/* 毛玻璃样式 */
+.glass-card{
+  /* 半透明底色，建议用白/黑加透明度 */
+  background: rgba(255,255,255,.12);
+  /* 让背后的内容模糊、稍微提亮/饱和 */
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%); /* Safari */
+  /* 细节边框与投影，增强“玻璃边缘”观感 */
+  border: 1px solid rgba(255,255,255,.25);
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+</style>

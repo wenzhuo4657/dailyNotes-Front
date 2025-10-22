@@ -124,7 +124,7 @@ export async function  upload(data) {
 
 
 export async function updateCheckListTitle(data){
-    const res=await http.put("/api/md/field/checkList/title",data,{
+    const res=await http.post("/api/md/field/checkList/title",data,{
     responseType: "text"
   })
   return !!res.data;
