@@ -3,6 +3,16 @@ import { EventBus, Events } from '@/envBus/envBus';
 import { addItem, DownLoadFile, upload } from '@/services/markdown';
 import { ref } from 'vue';
 
+import { useI18n } from 'vue-i18n'
+
+const { t, locale } = useI18n()
+
+
+const toggle = () => {
+  locale.value = locale.value === 'en' ? 'zh' : 'en'
+  localStorage.setItem('locale', locale.value) // 持久化
+}
+
 let isPreview = true;
 const fileInput = ref<HTMLInputElement | null>(null);
 const uploading = ref(false);
@@ -53,8 +63,9 @@ async function onFileChange(e: Event) {
 <template>
   <div class="buttonBar">
     <!-- <button  @click="addItem">新增</button> -->
-    <button @click="toggleEditorMode">编辑/预览</button>
-    <button   @click="viewSelect">视图选择/返回</button>
+    <button @click="toggleEditorMode">{{t('edit')}}</button>
+    <button   @click="viewSelect">{{t('view')}}</button>
+    <button @click="toggle">{{ $t('switch') }}</button>
     <!-- ui优化 -->
      <!-- 1， 默认的滑动栏太丑了 -->
 
@@ -67,8 +78,8 @@ async function onFileChange(e: Event) {
    <!-- 不常用 ： 导入、导出 -->
     <!-- 考虑做一个边栏，用于选择、改变视图状态， -->
 
-    <button @click="DownLoadFile">导出</button>
-    <button @click="onClickImport" :disabled="uploading">导入</button>
+    <button @click="DownLoadFile">{{t('export')}}</button>
+    <button @click="onClickImport" :disabled="uploading">{{t('import')}}</button>
 
 
     <!-- 隐藏的文件选择框 -->
