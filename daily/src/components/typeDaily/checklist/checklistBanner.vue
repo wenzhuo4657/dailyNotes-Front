@@ -5,18 +5,29 @@ import {
   Check,
   Plus
 } from '@element-plus/icons-vue'
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { ChecklistItem } from '@/type/DailyItem';
 
-type Item = { id: number; title: string; content: string;expand:string;editing: boolean }
-const items = ref<Item[]>([])
-const current = ref<Item | null>(null)
-
-
-const all=ref<Item[]>([])
-const finishs = ref<Item[]>([])
-const notCompleted=ref<Item[]>([])
+// 展示变量  
+const items = ref<ChecklistItem[]>([])
+const current = ref<ChecklistItem | null>(null)
 
 
+
+// 所有数据，通过计算属性动态更新
+const all=ref<ChecklistItem[]>([])
+
+
+const finishs = computed(
+  ()=>{
+    return all.value.filter( item=> item.expand === 'true')
+  }
+)
+const notCompleted=computed(
+  ()=>{
+    return all.value.filter(item => item.expand === 'false')
+  }
+)
 
 // 获取远程服务器上的列表
 async function fetchContent() {
@@ -24,37 +35,15 @@ async function fetchContent() {
   const list = Array.isArray(json) ? json : json.data;
   if (!Array.isArray(list)) throw new Error('返回不是数组或 data 数组')
 
-  items.value = list.map(({ id, title, content ,expand}) => ({ id, title, content,expand,editing: false   }))
+  all.value = list.map(({ id, title, content ,expand}) => ({ id, title, content,expand,editing: false   }))
+  items.value=all.value
   current.value = items.value[0] ?? null
-  toBool(items.value)
+
 
   
 }
 
-//处理列表数据，根据expand字段解析是否完成，
-function toBool(data:Item[]){
 
-  const done: Item[] = [];
-  const todo: Item[] = [];
-
-  for(let i=0;i<data.length;i++){
-    const item=data[i];
-    if(item.expand=='true'){
-      done.push(item);
-    }else{
-      todo.push(item);
-    }
-
-  }
-  all.value=data
-  finishs.value = done;
-  notCompleted.value = todo;
-
-  items.value=notCompleted.value
-
-  console.log("数据回调完成")
-
-}
 
 // 动态切换items
 function changeItems(data){
@@ -84,7 +73,7 @@ onBeforeUnmount(() => {
 })
 
 
- function isSuccess(item:Item){
+ function isSuccess(item:ChecklistItem){
   console.log("改变status")
   updateCheckListStatus(item.id);
 }
@@ -95,7 +84,7 @@ function addItem(){
   fetchContent()
 }
 
-function updateContent(item:Item){
+function updateContent(item:ChecklistItem){
     type data={id:number,content:String}
     const vo: data = { id: item.id, content: item.content };
     updateItemByType(vo,1);
@@ -103,7 +92,7 @@ function updateContent(item:Item){
 }
 
 
-function updateTitle(item:Item){
+function updateTitle(item:ChecklistItem){
     type data={id:number,title:String}
     const vo: data = { id: item.id, title: item.title };
     updateCheckListTitle(vo);
