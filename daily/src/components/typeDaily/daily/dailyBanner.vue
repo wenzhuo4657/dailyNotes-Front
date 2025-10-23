@@ -8,11 +8,12 @@ import ItemVierAndEndit from '@/components/typeDaily/daily/ItemVierAndEndit.vue'
 import {
   Plus
 } from '@element-plus/icons-vue'
+import { DailyItem } from '@/type/DailyItem';
 
 
-type Item = { id: number; title: string; content: string }
-const items = ref<Item[]>([])
-const current = ref<Item | null>(null)
+
+const items = ref< DailyItem[]>([])
+const current = ref<DailyItem | null>(null)
 
 
 
