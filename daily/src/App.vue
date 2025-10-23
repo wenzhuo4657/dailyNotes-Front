@@ -3,6 +3,9 @@
 import ButtonBar from '@/components/button/ButtonBar.vue'
 import { ref } from 'vue'
 import Banner from '@/components/banner.vue';
+import { useI18n } from 'vue-i18n'
+
+const { t, locale } = useI18n()
 
 
 
@@ -10,9 +13,11 @@ import Banner from '@/components/banner.vue';
 
 <template>
   <div class="any">
+ 
+
 
     <div  class="bar">      
-        <h1>序幕与新章</h1>
+        <h1>{{t('序幕与新章')}}</h1>
         <div>
           <ButtonBar></ButtonBar>
      

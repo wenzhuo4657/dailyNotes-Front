@@ -7,6 +7,9 @@ import {
 } from '@element-plus/icons-vue'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { ChecklistItem } from '@/type/DailyItem';
+import { useI18n } from 'vue-i18n'
+
+const { t, locale } = useI18n()
 
 // 展示变量  
 const items = ref<ChecklistItem[]>([])
@@ -109,8 +112,8 @@ function updateTitle(item:ChecklistItem){
 <template>
     <div  class="banner">
         <el-button type="success" :icon="Plus"  @click="addItem" circle />
-        <el-button  @click="changeItems(2)">todo</el-button>
-        <el-button  @click="changeItems(3)">finishs</el-button>
+        <el-button  @click="changeItems(2)">{{t('todo')}}</el-button>
+        <el-button  @click="changeItems(3)">{{t('finishs')}}</el-button>
 
         
     </div>
