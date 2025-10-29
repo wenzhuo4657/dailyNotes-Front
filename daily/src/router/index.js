@@ -1,41 +1,46 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
+import Home from '../page/home/Home.vue';
+import Login from '@/page/login/Login.vue';
+import Oauth from '@/page/oauth/Oauth.vue';
 
 const routes = [
   {
-    path: '/',
+    path: '/home',
     name: 'Home',
-    component: () => import('../page/home/Home.vue'),
-    meta: { requiresAuth: true, title: '主页' }
+    meta: { requiresAuth: true }, // 使用布尔值
+    component: Home,
   },
   {
     path: '/login',
     name: 'Login',
-    component: () => import('../page/login/login.vue'),
-    meta: { requiresAuth: false, title: '登录' }
+    meta: { requiresAuth: false }, // 使用布尔值
+    component: Login,
   },
   {
-    path: '/:pathMatch(.*)*',
-    redirect: '/'
-  }
-]
+    path: '/auth/callback',
+    name : 'callback',
+    meta: { requiresAuth: false},
+    component: Oauth
+
+  } 
+];
 
 const router = createRouter({
+  // TODO: createWebHistory下的URL只是看起来会很正常，实际上仅仅存在 index.html, 所以，需要在 Web 服务器上设置回退路由
   history: createWebHistory(import.meta.env.BASE_URL),
   routes
-})
+});
 
-router.beforeEach((to, from, next) => {
-  document.title = to.meta.title || 'Daily'
 
-  const token = localStorage.getItem('token') || sessionStorage.getItem('token')
 
-  if (to.path !== '/login' && to.meta.requiresAuth && !token) {
-    next({ path: '/login', query: { redirect: to.fullPath } })
-  } else if (to.path === '/login' && token) {
-    next((to.query && to.query.redirect) || '/')
-  } else {
-    next()
+router.beforeEach((to, from) => {
+  const token = localStorage.getItem('token');
+  if (
+    to.meta.requiresAuth && !token
+  ) {
+    // 将用户重定向到登录页面
+    return { name: 'Login' };
   }
-})
+});
 
-export default router
+export default router;

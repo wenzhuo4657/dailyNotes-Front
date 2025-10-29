@@ -5,7 +5,7 @@
 </script>
 
 <template>
- 登录
+ oauth验证
   
 </template>
 
