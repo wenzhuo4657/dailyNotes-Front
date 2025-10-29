@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 
 import 'highlight.js/styles/github.css'
-import {  getMd,addItem } from "@/services/markdown";
+import {  getMd,addItem } from "@/services/request";
 import { EventBus, Events } from '@/envBus/envBus'
 import ItemVierAndEndit from '@/components/typeDaily/daily/ItemVierAndEndit.vue';
 import {

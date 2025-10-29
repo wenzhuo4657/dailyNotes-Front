@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { EventBus, Events } from '@/envBus/envBus';
-import { addItem, DownLoadFile, upload } from '@/services/markdown';
+import { DownLoadFile, upload } from '@/services/request';
 import { ref } from 'vue';
 
 import { useI18n } from 'vue-i18n'

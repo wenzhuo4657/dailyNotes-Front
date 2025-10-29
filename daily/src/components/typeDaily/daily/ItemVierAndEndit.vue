@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { EventBus, Events } from '@/envBus/envBus'
-import { updateItem } from '@/services/markdown'
+import { updateItem } from '@/services/request'
 import mdView from '@/components/content/markdownView.vue'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 

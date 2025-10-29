@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { addItemByType, getMdByType, updateCheckListStatus, updateCheckListTitle, updateItemByType } from '@/services/markdown';
+import { addItemByType, getMdByType, updateCheckListStatus, updateCheckListTitle, updateItemByType } from '@/services/request';
 import {
   Check,
   Plus
@@ -34,7 +34,7 @@ const notCompleted=computed(
 
 // 获取远程服务器上的列表
 async function fetchContent() {
-  const json = await getMdByType(1,1);
+  const json = await getMdByType({ contentNameId: 1, type: 1 });
   const list = Array.isArray(json) ? json : json.data;
   if (!Array.isArray(list)) throw new Error('返回不是数组或 data 数组')
 
@@ -82,15 +82,14 @@ onBeforeUnmount(() => {
 }
 
 function addItem(){
-  const data={content_name_Id: 1,type: 1}
+  const data={ contentNameId: 1, type: 1 }
   const res=addItemByType(data);
   fetchContent()
 }
 
 function updateContent(item:ChecklistItem){
-    type data={id:number,content:String}
-    const vo: data = { id: item.id, content: item.content };
-    updateItemByType(vo,1);
+    const vo = { id: item.id, type: 1, content: item.content };
+    updateItemByType(vo);
     console.log(item)
 }
 

@@ -4,6 +4,10 @@ import checklistBanner from '@/components/typeDaily/checklist/checklistBanner.vu
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { EventBus, Events } from '@/envBus/envBus';
 
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 
 const viewList = ['daily', 'checklist'] as const;
 const awesome=ref(false)
@@ -30,7 +34,13 @@ const compMap = {
 } as const;
 </script>
 <template>
+  <div class="all banner  banner-size">
+    <div style="height: 10%;">
+       <h1>{{t('title')}}</h1>
+    </div>
+   
     <div v-if="awesome" class="select">
+      
       <el-radio v-model="current" :label="viewList[0]">{{  viewList[0]}}</el-radio>
       <el-radio v-model="current" :label="viewList[1]">{{  viewList[1]}}</el-radio>
 
@@ -38,9 +48,11 @@ const compMap = {
       <strong>当前选择： {{ current }}</strong>
     </div>
    
-    <div v-else class="banner  banner-size">
+    <div v-else class="">
           <component :is="compMap[current]" />
     </div>
+  </div>
+
 
 
 
@@ -50,9 +62,12 @@ const compMap = {
 </template>
 
 <style>
-.select{
+.all{
+  display: flex;
+  flex-direction: column
 
 }
+
 .banner{
   background-image: var(--cdn-url);  
 
