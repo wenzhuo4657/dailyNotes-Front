@@ -4,10 +4,20 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import { i18n } from './i18n'
 import router from './router'
+import { createPinia } from 'pinia'
+import { initHttp } from './lib/http'
+import { useAuthStore } from './storage/auth'
+const app = createApp(App)
 
-createApp(App)
+app
+  .use(createPinia())
   .use(router)
   .use(ElementPlus)
   .use(i18n)
-  .mount('#app')
 
+const userStore = useAuthStore(); 
+
+
+initHttp(userStore);
+
+app.mount('#app')

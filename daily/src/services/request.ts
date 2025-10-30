@@ -1,4 +1,4 @@
-import { http } from "@/lib/http";
+import { getHttp } from "@/lib/http";
 import { QueryItemDto } from "@/type/requestDto/QueryItemDto";
 import { UpdateItemDto } from "@/type/requestDto/UpdateItemDto";
 import { InsertItemDto } from "@/type/requestDto/InsertItemDto";
@@ -10,9 +10,14 @@ import { ref } from "vue";
 
 
 
+
+
+
+
 export async  function getMdByType(data:QueryItemDto){
+  const http=getHttp()
   const res=await http.post("/api/item/get",data,{
-    headers: {      
+    headers: {
     Accept: "application/json",
     },
      responseType: "json"
@@ -24,11 +29,13 @@ export async  function getMdByType(data:QueryItemDto){
 
 // todo 临时
 export async function addItem() {
+  const http=getHttp()
   const payload: InsertItemDto = { contentNameId: 0, type: 0 };
   return addItemByType(payload);
 }
 
 export async function getMd() {
+  const http=getHttp()
   return getMdByType({ contentNameId: 0, type: 0 });
 }
 export async function updateItem(data: { id: number; content: string }) {
@@ -39,9 +46,10 @@ export async function updateItem(data: { id: number; content: string }) {
 
 export async function  updateItemByType(data:UpdateItemDto) {
 
-  
+  const http=getHttp()
 
-  const res=await http.post("/api/item//update",data,{
+  const res=await http.post("/api/item/update",data,{
+    
     responseType: "text"
   })
   return !!res.data;
@@ -52,7 +60,9 @@ export async function  updateItemByType(data:UpdateItemDto) {
 
 
 export async function addItemByType(data:InsertItemDto) {
+  const http=getHttp()
   const res=await http.post("/api/item/insert",data,{
+
     responseType: "text"
   })
   return !!res.data;
@@ -65,6 +75,7 @@ export async function addItemByType(data:InsertItemDto) {
 
 
 export async function  DownLoadFile(){
+  const http=getHttp()
   const res=await http.get("api/DownLoadFile",{
     responseType: 'blob',
     headers :{
@@ -94,6 +105,7 @@ export async function  DownLoadFile(){
 
 
 export async function  upload(data) {
+  const http=getHttp()
   const progress = ref(0);
   const res=await http.post("api/upload",data,  
       {
@@ -114,6 +126,7 @@ export async function  upload(data) {
 
 
 export async function updateCheckListTitle(data:UpdateCheckListDto){
+  const http=getHttp()
     const res=await http.post("/api/item/field/checklist/title",data,{
     responseType: "text"
   })
@@ -124,9 +137,11 @@ export async function updateCheckListTitle(data:UpdateCheckListDto){
 
 
 export async function updateCheckListStatus(data:number){
+  const http=getHttp()
     let url="/api/item/field/checklist/finish"
     url+="?id="+data
     const res=await http.post(url,{
+
     responseType: "text"
      })
   return !!res.data;

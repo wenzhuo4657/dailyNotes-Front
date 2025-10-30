@@ -2,8 +2,17 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../page/home/Home.vue';
 import Login from '@/page/login/Login.vue';
 import Oauth from '@/page/oauth/Oauth.vue';
+import { useAuthStore } from '@/storage/auth';
 
 const routes = [
+  {
+    path: '/',
+    name: 'Root',
+    redirect: () => {
+      const token = localStorage.getItem('token')
+      return token ? '/home' : '/login'
+    }
+  },
   {
     path: '/home',
     name: 'Home',
@@ -34,9 +43,8 @@ const router = createRouter({
 
 
 router.beforeEach((to, from) => {
-  const token = localStorage.getItem('token');
   if (
-    to.meta.requiresAuth && !token
+    to.meta.requiresAuth && !useAuthStore().isAuthenticated
   ) {
     // 将用户重定向到登录页面
     return { name: 'Login' };
