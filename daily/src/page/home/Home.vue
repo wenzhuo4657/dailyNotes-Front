@@ -1,6 +1,7 @@
 <script setup>
-import ButtonBar from '@/components/button/ButtonBar.vue'
-import Banner from '@/components/banner.vue'
+import ButtonBar from '@/page/home/components/button/ButtonBar.vue'
+import Banner from '@/page/home/components/banner.vue'
+
 </script>
 
 <template>
@@ -12,6 +13,7 @@ import Banner from '@/components/banner.vue'
       <Banner />
     </div>
   </div>
+
 </template>
 
 <style scoped>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import dailyBanner from '@/components/typeDaily/daily/dailyBanner.vue'
-import checklistBanner from '@/components/typeDaily/checklist/checklistBanner.vue';
+import dailyBanner from '@/page/home/components/typeDaily/daily/dailyBanner.vue'
+import checklistBanner from '@/page/home/components/typeDaily/checklist/checklistBanner.vue';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { EventBus, Events } from '@/envBus/envBus';
 
