@@ -27,7 +27,6 @@ export async  function getMdByType(data:QueryItemDto){
   return res.data;
 }
 
-// todo 临时
 export async function addItem() {
   const http=getHttp()
   const payload: InsertItemDto = { contentNameId: 0, type: 0 };
@@ -37,11 +36,6 @@ export async function addItem() {
 export async function getMd() {
   const http=getHttp()
   return getMdByType({ contentNameId: 0, type: 0 });
-}
-export async function updateItem(data: { id: number; content: string }) {
-  // Default type for daily content
-  const payload: UpdateItemDto = { id: data.id, content: data.content, type: 0 };
-  return updateItemByType(payload);
 }
 
 export async function  updateItemByType(data:UpdateItemDto) {
@@ -55,6 +49,8 @@ export async function  updateItemByType(data:UpdateItemDto) {
   return !!res.data;
   
 }
+
+
 
 
 
@@ -147,4 +143,21 @@ export async function updateCheckListStatus(data:number){
   return !!res.data;
 
 
+}
+
+export async function getAllTypes() {
+  const http = getHttp();
+  const url = "/api/types/getAllTypes";
+  const res = await http.get(url);
+  return res.data;
+}
+
+export async function getTypesWithItems(data:number) {
+    const http=getHttp()
+    let url="/api/types/getContentIdsByTypes"
+    url+="?id="+data
+    const res=await http.get(url)
+    return res.data;
+
+  
 }

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { EventBus, Events } from '@/envBus/envBus'
-import { updateItem } from '@/services/request'
+import { updateItemByType } from '@/services/request'
 import mdView from '@/page/home/components/content/markdownView.vue'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { UpdateItemDto } from '@/type/requestDto/UpdateItemDto'
 
 
 const id = defineModel<number | null>('id')
@@ -40,9 +41,13 @@ async function saveContent() {
 
   isSaving.value = true
   try {
-    type Item={id:number,content:String}
-    const data: Item = { id: id.value, content: content.value };
-    await updateItem(data);
+    let typeId = 0
+    try {
+      const saved = Number(sessionStorage.getItem('view.typeId'))
+      if (!Number.isNaN(saved)) typeId = saved
+    } catch {}
+    const data: UpdateItemDto = { id: id.value as number, content: content.value, type: typeId }
+    await updateItemByType(data)
   } finally {
     isSaving.value = false
   }
@@ -58,7 +63,14 @@ async function saveContent() {
           <md-view v-model="content"></md-view>
         </div>
         <div v-else  class="editor-wrap">
-            <textarea v-model="content"   class="edit_sqlit"></textarea>
+          <el-input
+            v-model="content"
+            type="textarea"
+            :autosize="{ minRows: 16, maxRows: 40 }"
+            class="edit_input"
+            spellcheck="false"
+            placeholder="Please input"
+          />
         </div>
             
     </div>
@@ -76,15 +88,15 @@ async function saveContent() {
 }
 
 .editor-wrap {
-  flex: 1;           
+  flex: 1;
   display: flex;
+  align-items: stretch;
+  width: 100%;
 }
-.edit_sqlit{
-    display: block;
-    width: 80%;
-    height: 80%;
-    flex: 1;           
-    resize: none
+.edit_input { width: 100%; }
+.edit_input textarea {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  line-height: 1.5;
 }
 
 

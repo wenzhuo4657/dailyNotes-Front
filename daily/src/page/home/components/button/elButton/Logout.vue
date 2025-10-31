@@ -19,7 +19,7 @@ async function onLogout() {
 </script>
 
 <template>
-  <el-button type="danger" plain @click="onLogout">
+  <el-button type="success" plain @click="onLogout">
     <strong>退出登录</strong>
   </el-button>
   

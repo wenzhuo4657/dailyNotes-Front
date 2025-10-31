@@ -2,16 +2,35 @@
 import ButtonBar from '@/page/home/components/button/ButtonBar.vue'
 import Banner from '@/page/home/components/banner.vue'
 
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 </script>
 
 <template>
-  <div class="any">
-    <div class="bar">
-      <ButtonBar />
+ 
+    <div class="any">
+ 
+
+
+    <div  class="bar">      
+             <h1>{{t('title')}}</h1>
+        <div>
+          <ButtonBar></ButtonBar>
+     
+        </div>
     </div>
-    <div class="banner">
-      <Banner />
-    </div>
+      
+        <div  class="banner">
+
+          <Banner></Banner>
+          
+
+        </div>
+        
+
+
   </div>
 
 </template>
