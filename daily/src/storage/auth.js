@@ -19,10 +19,12 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = userInfo
     localStorage.setItem('userInfo', JSON.stringify(userInfo))
   }
+  
 
   const logout = () => {
     token.value = ''
     user.value = null
+
     localStorage.removeItem('token')
     localStorage.removeItem('userInfo')
     // 可以在这里调用后端的登出接口

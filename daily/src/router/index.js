@@ -3,6 +3,7 @@ import Home from '../page/home/Home.vue';
 import Login from '@/page/login/Login.vue';
 import Oauth from '@/page/oauth/Oauth.vue';
 import { useAuthStore } from '@/storage/auth';
+import Layout from '@/page/home/layout.vue';
 
 const routes = [
   {
@@ -16,13 +17,13 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    meta: { requiresAuth: true }, // 使用布尔值
-    component: Home,
+    meta: { requiresAuth: true }, // 需要鉴权
+    component: Layout,
   },
   {
     path: '/login',
     name: 'Login',
-    meta: { requiresAuth: false }, // 使用布尔值
+    meta: { requiresAuth: false },
     component: Login,
   },
   {
@@ -35,20 +36,18 @@ const routes = [
 ];
 
 const router = createRouter({
-  // TODO: createWebHistory下的URL只是看起来会很正常，实际上仅仅存在 index.html, 所以，需要在 Web 服务器上设置回退路由
+  // createWebHistory 需要服务器支持回退路由到 index.html
   history: createWebHistory(import.meta.env.BASE_URL),
   routes
 });
 
-
-
 router.beforeEach((to, from) => {
-  if (
-    to.meta.requiresAuth && !useAuthStore().isAuthenticated
-  ) {
-    // 将用户重定向到登录页面
+  const auth = useAuthStore();
+  const authed = auth.isAuthenticated?.value ?? !!auth.token;
+  if (to.meta.requiresAuth && !authed) {
     return { name: 'Login' };
   }
 });
 
 export default router;
+

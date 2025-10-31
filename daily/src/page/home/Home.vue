@@ -17,18 +17,25 @@ import Banner from '@/page/home/components/banner.vue'
 </template>
 
 <style scoped>
-.any {
+.bar{
+  justify-items: center;
+  display: grid;
+  grid-template-rows:  10vh 10vh;
+}
+
+.any{
   width: 100vw;
   height: 100vh;
-  display: flex;
-  grid-template-columns: 20% 80%;
+  display: grid;
+  grid-template-rows:  20vh 80vh;
   background: rgb(222, 215, 171);
+  justify-items: center;
+
 }
-.banner {
+.banner{
   display: block;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
+  width: 80vw;
+  overflow: auto; 
 }
 </style>
 

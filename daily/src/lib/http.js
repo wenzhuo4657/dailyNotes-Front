@@ -16,28 +16,41 @@ export function initHttp(userStore) {
 
   service.interceptors.request.use(
     (config) => {
-      const token = userStore && userStore.token;
-      if (token) {
-        // Ensure headers exists
-        if (!config.headers) {
-          config.headers = {};
-        }
-        // Axios v1 uses AxiosHeaders; prefer .set if available
-        try {
+      // 兼容 Pinia ref 与普通字符串
+      const raw = userStore && userStore.token;
+      const token = (raw && typeof raw === 'object' && 'value' in raw) ? raw.value : raw;
+
+      // 确保 headers 存在
+      if (!config.headers) {
+        config.headers = {};
+      }
+
+      // 动态设置/清理 satoken
+      try {
+        if (token) {
           if (typeof config.headers.set === 'function') {
             config.headers.set('satoken', `Bearer ${token}`);
           } else {
             config.headers['satoken'] = `Bearer ${token}`;
           }
-        } catch (_) {
+        } else {
+          if (typeof config.headers.delete === 'function') {
+            config.headers.delete('satoken');
+          } else if ('satoken' in config.headers) {
+            delete config.headers['satoken'];
+          }
+        }
+      } catch (_) {
+        if (token) {
           config.headers['satoken'] = `Bearer ${token}`;
+        } else if ('satoken' in config.headers) {
+          delete config.headers['satoken'];
         }
       }
+
       return config;
     },
-    (error) => {
-      return Promise.reject(error);
-    }
+    (error) => Promise.reject(error)
   );
 
 
