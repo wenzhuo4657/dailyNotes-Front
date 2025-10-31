@@ -1,31 +1,64 @@
 <script setup>
-import { useAuthStore } from '@/storage/auth'
-import { useRouter } from 'vue-router'
-const authStore = useAuthStore()
-const router = useRouter()
-const logout = () => {
-  authStore.logout()
- router.push({ name: 'Login', query: { info: 'logout' } })
-}
+
+import ButtonBar from '@/components/button/ButtonBar.vue'
+import { ref } from 'vue'
+import Banner from '@/components/banner.vue';
+import { useI18n } from 'vue-i18n'
+
+const { t, locale } = useI18n()
+
+
+
 </script>
 
 <template>
+  <div class="any">
+ 
 
 
-  <!-- 
-  <p><strong>Current route path:</strong> {{ $route.fullPath }}</p>
-  <nav>
-    <RouterLink to="/home">Go to Home</RouterLink>
-    <br></br>
-    <RouterLink to="/login">Go to login</RouterLink>
-  </nav>
-  <button @click="logout">logout</button>
-  -->
-  <main>
-    <RouterView />
-  </main>
+    <div  class="bar">      
+        <h1>{{t('序幕与新章')}}</h1>
+        <div>
+          <ButtonBar></ButtonBar>
+     
+        </div>
+    </div>
+      
+        <div  class="banner">
+
+          <Banner></Banner>
+          
+
+        </div>
+        
+
+
+  </div>
+
+
 </template>
 
 <style scoped>
-</style>
+.bar{
+  justify-items: center;
+  display: grid;
+  grid-template-rows:  10vh 10vh;
+}
 
+.any{
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-rows:  20vh 80vh;
+  background: rgb(222, 215, 171);
+  justify-items: center;
+
+}
+.banner{
+  display: block;
+  width: 80vw;
+  overflow: auto; 
+}
+
+
+</style>
