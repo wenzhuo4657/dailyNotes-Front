@@ -1,15 +1,26 @@
 <script setup lang="ts">
-import dailyBanner from '@/components/typeDaily/daily/dailyBanner.vue'
-import checklistBanner from '@/components/typeDaily/checklist/checklistBanner.vue';
+import dailyBanner from '@/page/home/components/typeDaily/daily/dailyBanner.vue'
+import checklistBanner from '@/page/home/components/typeDaily/checklist/checklistBanner.vue';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { EventBus, Events } from '@/envBus/envBus';
 
+import { useI18n } from 'vue-i18n'
 
-const viewList = ['daily', 'checklist'] as const;
-const awesome=ref(false)
+const { t } = useI18n()
+
+//  TODO 索引名称需要前后端约定
+const STORAGE_KEY = 'view.current'
+
 
 // vue组件生命周期：组件挂载完成后执
 onMounted(() => {
+    try {
+      const saved = sessionStorage.getItem(STORAGE_KEY)
+      if (saved && saved in compMap) {
+        // @ts-ignore
+        current.value = saved
+      }
+    } catch {}
     EventBus.$on(Events.Button_view,handleEditorToggle)
 })
 // vue组件生命周期：在组件实例被卸载之前调用
@@ -19,28 +30,26 @@ onBeforeUnmount(() => {
 })
 
 const handleEditorToggle = (nextState) => {
-  awesome.value = Boolean(nextState)
+  current.value = nextState
+  try { sessionStorage.setItem(STORAGE_KEY, String(current.value)) } catch {}
 }
 
 
-const current = ref("daily"); // 控制显示哪个
+const current = ref("dailyBase"); // 控制显示哪个
 const compMap = {
-  daily: dailyBanner,
+  dailyBase: dailyBanner,
   checklist: checklistBanner,
 } as const;
 </script>
 <template>
-    <div v-if="awesome" class="select">
-      <el-radio v-model="current" :label="viewList[0]">{{  viewList[0]}}</el-radio>
-      <el-radio v-model="current" :label="viewList[1]">{{  viewList[1]}}</el-radio>
-
-      <br></br>
-      <strong>当前选择： {{ current }}</strong>
-    </div>
+  <div class="all banner  banner-size">
    
-    <div v-else class="banner  banner-size">
+   
+    <div  class="">
           <component :is="compMap[current]" />
     </div>
+  </div>
+
 
 
 
@@ -50,9 +59,12 @@ const compMap = {
 </template>
 
 <style>
-.select{
+.all{
+  display: flex;
+  flex-direction: column
 
 }
+
 .banner{
   background-image: var(--cdn-url);  
 
