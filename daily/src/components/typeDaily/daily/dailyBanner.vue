@@ -2,9 +2,15 @@
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 
 import 'highlight.js/styles/github.css'
+<<<<<<< HEAD:daily/src/page/home/components/typeDaily/daily/dailyBanner.vue
 import {  getMd,addItem } from "@/services/request";
 import { EventBus, Events } from '@/envBus/envBus'
 import ItemVierAndEndit from '@/page/home/components/typeDaily/daily/ItemVierAndEndit.vue';
+=======
+import {  getMd,addItem } from "@/services/markdown";
+import { EventBus, Events } from '@/envBus/envBus'
+import ItemVierAndEndit from '@/components/typeDaily/daily/ItemVierAndEndit.vue';
+>>>>>>> parent of 363a478 (Merge pull request #14 from wenzhuo4657/plus):daily/src/components/typeDaily/daily/dailyBanner.vue
 import {
   Plus
 } from '@element-plus/icons-vue'

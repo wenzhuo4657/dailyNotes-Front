@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import dailyBanner from '@/page/home/components/typeDaily/daily/dailyBanner.vue'
-import checklistBanner from '@/page/home/components/typeDaily/checklist/checklistBanner.vue';
+import dailyBanner from '@/components/typeDaily/daily/dailyBanner.vue'
+import checklistBanner from '@/components/typeDaily/checklist/checklistBanner.vue';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { EventBus, Events } from '@/envBus/envBus';
 
+<<<<<<< HEAD:daily/src/page/home/components/banner.vue
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
+=======
+>>>>>>> parent of 363a478 (Merge pull request #14 from wenzhuo4657/plus):daily/src/components/banner.vue
 
 const viewList = ['daily', 'checklist'] as const;
 const awesome=ref(false)
@@ -34,6 +37,7 @@ const compMap = {
 } as const;
 </script>
 <template>
+<<<<<<< HEAD:daily/src/page/home/components/banner.vue
   <div class="all banner  banner-size">
     <div style="height: 10%;">
        <h1>{{t('title')}}</h1>
@@ -49,10 +53,19 @@ const compMap = {
     </div>
    
     <div v-else class="">
+=======
+    <div v-if="awesome" class="select">
+      <el-radio v-model="current" :label="viewList[0]">{{  viewList[0]}}</el-radio>
+      <el-radio v-model="current" :label="viewList[1]">{{  viewList[1]}}</el-radio>
+
+      <br></br>
+      <strong>当前选择： {{ current }}</strong>
+    </div>
+   
+    <div v-else class="banner  banner-size">
+>>>>>>> parent of 363a478 (Merge pull request #14 from wenzhuo4657/plus):daily/src/components/banner.vue
           <component :is="compMap[current]" />
     </div>
-  </div>
-
 
 
 
@@ -62,12 +75,9 @@ const compMap = {
 </template>
 
 <style>
-.all{
-  display: flex;
-  flex-direction: column
+.select{
 
 }
-
 .banner{
   background-image: var(--cdn-url);  
 

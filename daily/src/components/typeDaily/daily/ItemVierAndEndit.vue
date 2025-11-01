@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { EventBus, Events } from '@/envBus/envBus'
+<<<<<<< HEAD:daily/src/page/home/components/typeDaily/daily/ItemVierAndEndit.vue
 import { updateItem } from '@/services/request'
 import mdView from '@/page/home/components/content/markdownView.vue'
+=======
+import { updateItem } from '@/services/markdown'
+import mdView from '@/components/content/markdownView.vue'
+>>>>>>> parent of 363a478 (Merge pull request #14 from wenzhuo4657/plus):daily/src/components/typeDaily/daily/ItemVierAndEndit.vue
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 
