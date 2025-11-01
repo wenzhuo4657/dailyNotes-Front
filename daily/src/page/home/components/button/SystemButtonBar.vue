@@ -3,8 +3,8 @@ import { ref, computed } from 'vue'
 import { useAuthStore } from '@/storage/auth'
 import { storeToRefs } from 'pinia'
 import Logout from './elButton/Logout.vue'
-import Language from './elButton/language.vue'
-import DataImport from './elButton/dataImport.vue'
+import Language from './elButton/Language.vue'
+import DataImport from './elButton/DataImport.vue'
 import DataDownLoad from './elButton/DataDownLoad.vue'
 
 
