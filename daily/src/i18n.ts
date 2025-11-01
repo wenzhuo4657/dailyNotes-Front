@@ -2,6 +2,7 @@ import { createI18n } from 'vue-i18n'
 
 const messages = {
   en: {
+    title: 'Prologue and New Chapter',
     hello: 'Hello',
     switch: 'Switch to Chinese',
     edit:'edit/preview',
@@ -13,6 +14,7 @@ const messages = {
     
   },
   zh: {
+    title: '序幕与新章',
     hello: '你好',
     switch: '切换到英文',
     edit:'编辑/预览',
