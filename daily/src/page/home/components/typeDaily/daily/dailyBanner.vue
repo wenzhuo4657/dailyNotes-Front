@@ -2,22 +2,18 @@
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 
 import 'highlight.js/styles/github.css'
-import {  getMd,addItem, getMdByType } from "@/services/request";
+import {  getMd,addItem } from "@/services/request";
 import { EventBus, Events } from '@/envBus/envBus'
-import ItemViewAndEdit from '@/page/home/components/typeDaily/daily/ItemViewAndEdit.vue';
+import ItemVierAndEndit from '@/page/home/components/typeDaily/daily/ItemVierAndEndit.vue';
 import {
   Plus
 } from '@element-plus/icons-vue'
 import { DailyItem } from '@/type/DailyItem';
-import Edit from './commponents/Edit.vue';
-import Insert from './commponents/Insert.vue';
 
 
 
 const items = ref< DailyItem[]>([])
 const current = ref<DailyItem | null>(null)
-const selectedTypeId = ref<number>(0)
-const selectedContentNameId = ref<number>(0)
 
 
 
@@ -26,7 +22,7 @@ const selectedContentNameId = ref<number>(0)
 
 // 获取远程服务器上的md文档
 async function fetchContent() {
-  const json = await getMdByType({ contentNameId: selectedContentNameId.value ?? 0, type: selectedTypeId.value ?? 0 });
+  const json = await getMd();
   const list = Array.isArray(json) ? json : json.data;
   if (!Array.isArray(list)) throw new Error('返回不是数组或 data 数组')
 
@@ -38,12 +34,6 @@ async function fetchContent() {
 
 // vue组件生命周期：组件挂载完成后执
 onMounted(() => {
-  try {
-    const typeSaved = Number(sessionStorage.getItem('view.typeId'))
-    if (!Number.isNaN(typeSaved)) selectedTypeId.value = typeSaved
-    const cnSaved = Number(sessionStorage.getItem('view.contentNameId'))
-    if (!Number.isNaN(cnSaved)) selectedContentNameId.value = cnSaved
-  } catch {}
   fetchContent()
 })
 // vue组件生命周期：在组件实例被卸载之前调用
@@ -57,30 +47,13 @@ function chooseContent(it){
   
 }
 
-function onTypeChanged(payload){
-  const id = typeof payload === 'number' ? payload : payload?.id
-  if (typeof id === 'number') {
-    selectedTypeId.value = id
+async function InsertItem(){
+  const res=await addItem();
+  if(res==true){
+    alert("当前文档的当日Item已添加/已存在，请手动刷新！！")
   }
+
 }
-function onContentNameChanged(payload){
-  const id = typeof payload === 'number' ? payload : payload?.id
-  if (typeof id === 'number') {
-    selectedContentNameId.value = id
-    fetchContent()
-  }
-}
-
-onMounted(() => {
-  EventBus.$on(Events.Button_type, onTypeChanged)
-  EventBus.$on(Events.Button_contentName, onContentNameChanged)
-})
-onBeforeUnmount(() => {
-  EventBus.$off(Events.Button_type, onTypeChanged)
-  EventBus.$off(Events.Button_contentName, onContentNameChanged)
-})
-
-
 
 
 </script>
@@ -88,8 +61,9 @@ onBeforeUnmount(() => {
 <template>
   <div class="split">
    <div class="split_title">
-      <Edit></Edit>
-      <Insert></Insert>
+    
+      <el-button type="success" :icon="Plus"  @click="InsertItem" circle />
+
       <el-button 
           type="success" plain
           v-for="it in items"
@@ -102,7 +76,7 @@ onBeforeUnmount(() => {
     </div>
     <div   class="split_content">
       <div v-if="current"  class="editor-wrap">
-        <item-view-and-edit  v-model:id="current.id"  v-model:content="current.content"></item-view-and-edit>
+        <item-vier-and-endit  v-model:id="current.id"  v-model:content="current.content"></item-vier-and-endit>
       </div>
       <div v-else>
         <em>加载中...</em>

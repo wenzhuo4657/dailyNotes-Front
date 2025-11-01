@@ -3,7 +3,7 @@ import Home from '../page/home/Home.vue';
 import Login from '@/page/login/Login.vue';
 import Oauth from '@/page/oauth/Oauth.vue';
 import { useAuthStore } from '@/storage/auth';
-import Layout from '@/page/home/Layout.vue';
+import Layout from '@/page/home/layout.vue';
 
 const routes = [
   {
@@ -50,3 +50,4 @@ router.beforeEach((to, from) => {
 });
 
 export default router;
+

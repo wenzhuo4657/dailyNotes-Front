@@ -8,15 +8,12 @@ import {
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { ChecklistItem } from '@/type/DailyItem';
 import { useI18n } from 'vue-i18n'
-import { EventBus, Events } from '@/envBus/envBus'
 
 const { t, locale } = useI18n()
 
 // 展示变量  
 const items = ref<ChecklistItem[]>([])
 const current = ref<ChecklistItem | null>(null)
-const selectedTypeId = ref<number>(1)
-const selectedContentNameId = ref<number>(1)
 
 
 
@@ -37,7 +34,7 @@ const notCompleted=computed(
 
 // 获取远程服务器上的列表
 async function fetchContent() {
-  const json = await getMdByType({ contentNameId: selectedContentNameId.value ?? 1, type: selectedTypeId.value ?? 1 });
+  const json = await getMdByType({ contentNameId: 1, type: 1 });
   const list = Array.isArray(json) ? json : json.data;
   if (!Array.isArray(list)) throw new Error('返回不是数组或 data 数组')
 
@@ -70,21 +67,11 @@ function changeItems(data){
 
 // vue组件生命周期：组件挂载完成后执
 onMounted(() => {
-  try {
-    const typeSaved = Number(sessionStorage.getItem('view.typeId'))
-    if (!Number.isNaN(typeSaved)) selectedTypeId.value = typeSaved
-    const cnSaved = Number(sessionStorage.getItem('view.contentNameId'))
-    if (!Number.isNaN(cnSaved)) selectedContentNameId.value = cnSaved
-  } catch {}
   fetchContent()
-  EventBus.$on(Events.Button_type, onTypeChanged)
-  EventBus.$on(Events.Button_contentName, onContentNameChanged)
 
 })
 // vue组件生命周期：在组件实例被卸载之前调用
 onBeforeUnmount(() => {
-  EventBus.$off(Events.Button_type, onTypeChanged)
-  EventBus.$off(Events.Button_contentName, onContentNameChanged)
 
 })
 
@@ -95,18 +82,13 @@ onBeforeUnmount(() => {
 }
 
 function addItem(){
-  const data={ contentNameId: selectedContentNameId.value ?? 1, type: selectedTypeId.value ?? 1 }
+  const data={ contentNameId: 1, type: 1 }
   const res=addItemByType(data);
   fetchContent()
 }
 
 function updateContent(item:ChecklistItem){
-    let typeId = 1
-    try {
-      const saved = Number(sessionStorage.getItem('view.typeId'))
-      if (!Number.isNaN(saved)) typeId = saved
-    } catch {}
-    const vo = { id: item.id, type: typeId, content: item.content };
+    const vo = { id: item.id, type: 1, content: item.content };
     updateItemByType(vo);
     console.log(item)
 }
@@ -116,21 +98,6 @@ function updateTitle(item:ChecklistItem){
     type data={id:number,title:String}
     const vo: data = { id: item.id, title: item.title };
     updateCheckListTitle(vo);
-}
-
-// 监听来自按钮栏的筛选
-function onTypeChanged(payload){
-  const id = typeof payload === 'number' ? payload : payload?.id
-  if (typeof id === 'number') {
-    selectedTypeId.value = id
-  }
-}
-function onContentNameChanged(payload){
-  const id = typeof payload === 'number' ? payload : payload?.id
-  if (typeof id === 'number') {
-    selectedContentNameId.value = id
-    fetchContent()
-  }
 }
 
 

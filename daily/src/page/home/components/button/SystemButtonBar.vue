@@ -3,10 +3,6 @@ import { ref, computed } from 'vue'
 import { useAuthStore } from '@/storage/auth'
 import { storeToRefs } from 'pinia'
 import Logout from './elButton/Logout.vue'
-import Language from './elButton/language.vue'
-import DataImport from './elButton/dataImport.vue'
-import DataDownLoad from './elButton/DataDownLoad.vue'
-
 
 // 展开/收起控制
 const expanded = ref(false)
@@ -86,14 +82,19 @@ const onAvatarError = (e) => {
         <transition name="expand">
           <div v-show="expanded" class="actions">
             <div class="action">
-              <DataDownLoad></DataDownLoad>
+              <el-button type="success" plain>
+                <strong>????</strong>
+              </el-button>
             </div>
             <div class="action">
-              <DataImport></DataImport>
-      
+              <el-button type="success" plain>
+                <strong>?????????</strong>
+              </el-button>
             </div>
             <div class="action">
-              <Language></Language>
+              <el-button type="success" plain>
+                <strong>?????????</strong>
+              </el-button>
             </div>
             <div class="action">
               <Logout></Logout>
