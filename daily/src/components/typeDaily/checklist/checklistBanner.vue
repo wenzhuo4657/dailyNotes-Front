@@ -34,11 +34,10 @@ const notCompleted=computed(
 
 // 获取远程服务器上的列表
 async function fetchContent() {
-<<<<<<< HEAD:daily/src/page/home/components/typeDaily/checklist/checklistBanner.vue
+
+
   const json = await getMdByType({ contentNameId: 1, type: 1 });
-=======
-  const json = await getMdByType(1,1);
->>>>>>> parent of 363a478 (Merge pull request #14 from wenzhuo4657/plus):daily/src/components/typeDaily/checklist/checklistBanner.vue
+
   const list = Array.isArray(json) ? json : json.data;
   if (!Array.isArray(list)) throw new Error('返回不是数组或 data 数组')
 
@@ -86,24 +85,18 @@ onBeforeUnmount(() => {
 }
 
 function addItem(){
-<<<<<<< HEAD:daily/src/page/home/components/typeDaily/checklist/checklistBanner.vue
+
   const data={ contentNameId: 1, type: 1 }
-=======
-  const data={content_name_Id: 1,type: 1}
->>>>>>> parent of 363a478 (Merge pull request #14 from wenzhuo4657/plus):daily/src/components/typeDaily/checklist/checklistBanner.vue
+
   const res=addItemByType(data);
   fetchContent()
 }
 
 function updateContent(item:ChecklistItem){
-<<<<<<< HEAD:daily/src/page/home/components/typeDaily/checklist/checklistBanner.vue
-    const vo = { id: item.id, type: 1, content: item.content };
-    updateItemByType(vo);
-=======
+
     type data={id:number,content:String}
     const vo: data = { id: item.id, content: item.content };
-    updateItemByType(vo,1);
->>>>>>> parent of 363a478 (Merge pull request #14 from wenzhuo4657/plus):daily/src/components/typeDaily/checklist/checklistBanner.vue
+ 
     console.log(item)
 }
 
